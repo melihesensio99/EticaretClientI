@@ -1,4 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core'; // 1. OnInit'i import et
+import { ToastrService } from 'ngx-toastr';
+import { CustomToastr, ToastrPosition, ToastTrMessageType } from './services/iu/custom-toastr';
+import { PositionType } from './services/admin/alertify';
+
+declare var $: any;
+declare var jQuery: any;
 
 @Component({
   selector: 'app-root',
@@ -6,6 +12,8 @@ import { Component, signal } from '@angular/core';
   standalone: false,
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('EticaretClientI');
+export class App  {  
+constructor() { 
 }
+}
+
