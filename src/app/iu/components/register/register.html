@@ -1,95 +1,88 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-5"> 
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white text-center">
-          <h5 class="mb-0">Kayıt Ol</h5>
-        </div>
-        <div class="card-body p-4">
-          <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="nameSurname" class="form-label small fw-bold">Ad Soyad</label>
-                <input type="text" formControlName="nameSurname" class="form-control form-control-sm" id="nameSurname" placeholder="Ad Soyad" 
-                       [ngClass]="{'is-invalid': component['nameSurname'].invalid && (component['nameSurname'].touched || component['nameSurname'].dirty || submitted)}">
-                
-                <div *ngIf="component['nameSurname'].errors?.['required'] && (component['nameSurname'].touched || component['nameSurname'].dirty || submitted)" class="text-danger small">
-                  Ad Soyad gereklidir.
-                </div>
-                <div *ngIf="component['nameSurname'].errors?.['minlength'] && (component['nameSurname'].touched || component['nameSurname'].dirty || submitted)" class="text-danger small">
-                  En az 3 karakter olmalıdır.
-                </div>
-                <div *ngIf="component['nameSurname'].errors?.['maxlength'] && (component['nameSurname'].touched || component['nameSurname'].dirty || submitted)" class="text-danger small">
-                  En fazla 50 karakter olmalıdır.
-                </div>
-              </div>
+<div class="register-kutu">
+  <h2 class="baslik">Kayıt Ol</h2>
 
-              <div class="col-md-6 mb-3">
-                <label for="username" class="form-label small fw-bold">Kullanıcı Adı</label>
-                <input type="text" formControlName="username" class="form-control form-control-sm" id="username" placeholder="Kullanıcı Adı"
-                       [ngClass]="{'is-invalid': component['username'].invalid && (component['username'].touched || component['username'].dirty || submitted)}">
-                <div *ngIf="component['username'].errors?.['required'] && (component['username'].touched || component['username'].dirty || submitted)" class="text-danger small">
-                  Kullanıcı Adı gereklidir.
-                </div>
-                 <div *ngIf="component['username'].errors?.['minlength'] && (component['username'].touched || component['username'].dirty || submitted)" class="text-danger small">
-                  En az 3 karakter olmalıdır.
-                </div>
-                <div *ngIf="component['username'].errors?.['maxlength'] && (component['username'].touched || component['username'].dirty || submitted)" class="text-danger small">
-                  En fazla 50 karakter olmalıdır.
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label for="email" class="form-label small fw-bold">Email Adresi</label>
-              <input type="email" formControlName="email" class="form-control form-control-sm" id="email" placeholder="name@example.com"
-                     [ngClass]="{'is-invalid': component['email'].invalid && (component['email'].touched || component['email'].dirty || submitted)}">
-              <div *ngIf="component['email'].errors?.['required'] && (component['email'].touched || component['email'].dirty || submitted)" class="text-danger small">
-                  Email gereklidir.
-              </div>
-              <div *ngIf="component['email'].errors?.['email'] && (component['email'].touched || component['email'].dirty || submitted)" class="text-danger small">
-                  Geçerli bir email giriniz.
-              </div>
-              <div *ngIf="component['email'].errors?.['maxlength'] && (component['email'].touched || component['email'].dirty || submitted)" class="text-danger small">
-                  En fazla 50 karakter olmalıdır.
-              </div>
-            </div>
-
-            <div class="mb-3"> 
-              <label for="password" class="form-label small fw-bold">Şifre</label>
-              <input type="password" formControlName="password" class="form-control form-control-sm" id="password" placeholder="••••••••"
-                [ngClass]="{'is-invalid': component['password'].invalid && (component['password'].touched || component['password'].dirty || submitted)}">
-              <div *ngIf="component['password'].errors?.['required'] && (component['password'].touched || component['password'].dirty || submitted)" class="text-danger small">
-                  Şifre gereklidir.
-              </div>
-               <div *ngIf="component['password'].errors?.['minlength'] && (component['password'].touched || component['password'].dirty || submitted)" class="text-danger small">
-                  En az 6 karakter olmalıdır.
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <label for="passwordConfirm" class="form-label small fw-bold">Şifre Onay</label>
-              <input type="password" formControlName="passwordConfirm" class="form-control form-control-sm" id="passwordConfirm" placeholder="••••••••"
-                [ngClass]="{'is-invalid': (component['passwordConfirm'].invalid || registerForm.errors?.['notSame']) && (component['passwordConfirm'].touched || component['passwordConfirm'].dirty || submitted)}">
-               <div *ngIf="component['passwordConfirm'].errors?.['required'] && (component['passwordConfirm'].touched || component['passwordConfirm'].dirty || submitted)" class="text-danger small">
-                  Şifre onayı gereklidir.
-              </div>
-               <div *ngIf="component['passwordConfirm'].errors?.['minlength'] && (component['passwordConfirm'].touched || component['passwordConfirm'].dirty || submitted)" class="text-danger small">
-                  En az 6 karakter olmalıdır.
-              </div>
-              <div *ngIf="registerForm.errors?.['notSame'] && (component['passwordConfirm'].touched || component['passwordConfirm'].dirty || submitted)" class="text-danger small">
-                  Şifreler uyuşmuyor.
-              </div>
-            </div>
-
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">
-                Kaydı Tamamla
-              </button>
-            </div>
-          </form>
-        </div>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)">
+    
+    <div class="form-eleman">
+      <label for="nameSurname">Ad Soyad</label>
+      <input type="text" id="nameSurname" formControlName="nameSurname" placeholder="Ad Soyad"
+             [ngClass]="{'is-invalid': component['nameSurname'].invalid && (component['nameSurname'].touched || component['nameSurname'].dirty || submitted)}">
+      
+      <div *ngIf="component['nameSurname'].errors?.['required'] && (component['nameSurname'].touched || component['nameSurname'].dirty || submitted)" class="hata-mesaji">
+        Ad Soyad gereklidir.
+      </div>
+      <div *ngIf="component['nameSurname'].errors?.['minlength'] && (component['nameSurname'].touched || component['nameSurname'].dirty || submitted)" class="hata-mesaji">
+        En az 3 karakter olmalıdır.
+      </div>
+      <div *ngIf="component['nameSurname'].errors?.['maxlength'] && (component['nameSurname'].touched || component['nameSurname'].dirty || submitted)" class="hata-mesaji">
+        En fazla 50 karakter olmalıdır.
       </div>
     </div>
-  </div>
+
+    <div class="form-eleman">
+      <label for="username">Kullanıcı Adı</label>
+      <input type="text" id="username" formControlName="username" placeholder="Kullanıcı Adı"
+             [ngClass]="{'is-invalid': component['username'].invalid && (component['username'].touched || component['username'].dirty || submitted)}">
+
+      <div *ngIf="component['username'].errors?.['required'] && (component['username'].touched || component['username'].dirty || submitted)" class="hata-mesaji">
+        Kullanıcı Adı gereklidir.
+      </div>
+      <div *ngIf="component['username'].errors?.['minlength'] && (component['username'].touched || component['username'].dirty || submitted)" class="hata-mesaji">
+        En az 3 karakter olmalıdır.
+      </div>
+      <div *ngIf="component['username'].errors?.['maxlength'] && (component['username'].touched || component['username'].dirty || submitted)" class="hata-mesaji">
+        En fazla 50 karakter olmalıdır.
+      </div>
+    </div>
+
+    <div class="form-eleman">
+      <label for="email">Email Adresi</label>
+      <input type="email" id="email" formControlName="email" placeholder="name@example.com"
+             [ngClass]="{'is-invalid': component['email'].invalid && (component['email'].touched || component['email'].dirty || submitted)}">
+
+      <div *ngIf="component['email'].errors?.['required'] && (component['email'].touched || component['email'].dirty || submitted)" class="hata-mesaji">
+        Email gereklidir.
+      </div>
+      <div *ngIf="component['email'].errors?.['email'] && (component['email'].touched || component['email'].dirty || submitted)" class="hata-mesaji">
+        Geçerli bir email giriniz.
+      </div>
+      <div *ngIf="component['email'].errors?.['maxlength'] && (component['email'].touched || component['email'].dirty || submitted)" class="hata-mesaji">
+        En fazla 50 karakter olmalıdır.
+      </div>
+    </div>
+
+    <div class="form-eleman">
+      <label for="password">Şifre</label>
+      <input type="password" id="password" formControlName="password" placeholder="••••••••"
+             [ngClass]="{'is-invalid': component['password'].invalid && (component['password'].touched || component['password'].dirty || submitted)}">
+
+      <div *ngIf="component['password'].errors?.['required'] && (component['password'].touched || component['password'].dirty || submitted)" class="hata-mesaji">
+        Şifre gereklidir.
+      </div>
+      <div *ngIf="component['password'].errors?.['minlength'] && (component['password'].touched || component['password'].dirty || submitted)" class="hata-mesaji">
+        En az 6 karakter olmalıdır.
+      </div>
+    </div>
+
+    <div class="form-eleman">
+      <label for="passwordConfirm">Şifre Onay</label>
+      <input type="password" id="passwordConfirm" formControlName="passwordConfirm" placeholder="••••••••"
+             [ngClass]="{'is-invalid': (component['passwordConfirm'].invalid || registerForm.errors?.['notSame']) && (component['passwordConfirm'].touched || component['passwordConfirm'].dirty || submitted)}">
+
+      <div *ngIf="component['passwordConfirm'].errors?.['required'] && (component['passwordConfirm'].touched || component['passwordConfirm'].dirty || submitted)" class="hata-mesaji">
+        Şifre onayı gereklidir.
+      </div>
+      <div *ngIf="component['passwordConfirm'].errors?.['minlength'] && (component['passwordConfirm'].touched || component['passwordConfirm'].dirty || submitted)" class="hata-mesaji">
+        En az 6 karakter olmalıdır.
+      </div>
+      <div *ngIf="registerForm.errors?.['notSame'] && (component['passwordConfirm'].touched || component['passwordConfirm'].dirty || submitted)" class="hata-mesaji">
+        Şifreler uyuşmuyor.
+      </div>
+    </div>
+
+    <button type="submit" class="btn-kayit" [disabled]="registerForm.invalid">
+      KAYDI TAMAMLA
+    </button>
+
+  </form>
 </div>

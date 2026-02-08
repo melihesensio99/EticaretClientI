@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="login-kutu">
+        <h2 class="baslik">Giriş Yap</h2>
+        
+            <div class="form-eleman">
+                <label for="username">Kullanıcı Adı</label>
+                <input #txtuserNameOrEmail type="text" id="username" placeholder="Kullanıcı Adı veya Email" required>
+            </div>
+
+            <div class="form-eleman">
+                <label for="password">Şifre</label>
+                <input #txtPassword type="password" id="password" placeholder="Şifre" required>
+            </div>
+
+            <button type="submit" class="btn-giris" (click)="login(txtuserNameOrEmail.value,txtPassword.value)">GİRİŞ YAP</button>
+
+            <div class="alt-bilgi">
+                <a href="#">Şifremi Unuttum</a>
+            </div>
+    </div>
+
+</body>
+</html>

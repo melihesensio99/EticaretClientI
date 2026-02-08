@@ -12,19 +12,27 @@ import { Delete } from './directives/admin/delete';
 import { DeleteDialog } from './dialogs/delete-dialog/delete-dialog';
 import { FileUpload } from './services/common/file-upload/file-upload';
 import { FileUploadDialog } from './dialogs/file-upload-dialog/file-upload-dialog';
+import { JwtModule } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
     App,
     
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    AdminModule , IuModule
-    ,ToastrModule.forRoot()
-    ,NgxSpinnerModule,
-  ],
+ imports: [
+  BrowserModule,
+  AppRoutingModule,
+  AdminModule,
+  IuModule,
+  ToastrModule.forRoot(),
+  NgxSpinnerModule,
+  JwtModule.forRoot({
+    config: {
+      tokenGetter: () => localStorage.getItem("accessToken"),
+      allowedDomains: ["localhost:7045"]
+    }
+  })
+],
   providers: [
     { provide : "baseUrl", useValue : "https://localhost:7045/api", multi : true },
     provideBrowserGlobalErrorListeners(),

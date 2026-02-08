@@ -2,6 +2,7 @@ import { Component, signal, OnInit } from '@angular/core'; // 1. OnInit'i import
 import { ToastrService } from 'ngx-toastr';
 import { CustomToastr, ToastrPosition, ToastTrMessageType } from './services/iu/custom-toastr';
 import { PositionType } from './services/admin/alertify';
+import { Auth } from './services/common/auth';
 
 declare var $: any;
 declare var jQuery: any;
@@ -13,7 +14,17 @@ declare var jQuery: any;
   styleUrl: './app.css'
 })
 export class App  {  
-constructor() { 
+constructor(public authService : Auth , private toastr : CustomToastr) { 
+   authService.identityCheck();
+    
 }
+ signOut(){
+  localStorage.removeItem("accessToken");
+  this.authService.identityCheck();
+  this.toastr.message("Başarıyla çıkış yapıldı" , "Çıkış yapıldı!" , {
+    messageType : ToastTrMessageType.Success,
+    positionType : ToastrPosition.TopRight
+  });
+ }
 }
 
