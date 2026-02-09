@@ -5,9 +5,11 @@ import { RouterModule } from '@angular/router';
 
 
 
+import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
+
 @NgModule({
   declarations: [
-    Login
+ 
   ],
   imports: [
     CommonModule,

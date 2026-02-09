@@ -13,14 +13,17 @@ import { DeleteDialog } from './dialogs/delete-dialog/delete-dialog';
 import { FileUpload } from './services/common/file-upload/file-upload';
 import { FileUploadDialog } from './dialogs/file-upload-dialog/file-upload-dialog';
 import { JwtModule } from '@auth0/angular-jwt';
+import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule, SOCIAL_AUTH_CONFIG } from '@abacritt/angularx-social-login';
+import { Login } from './iu/components/login/login';
 
 @NgModule({
   declarations: [
     App,
-    
+    Login
   ],
  imports: [
   BrowserModule,
+  GoogleSigninButtonModule,
   AppRoutingModule,
   AdminModule,
   IuModule,
@@ -31,10 +34,27 @@ import { JwtModule } from '@auth0/angular-jwt';
       tokenGetter: () => localStorage.getItem("accessToken"),
       allowedDomains: ["localhost:7045"]
     }
-  })
+  }),
+  SocialLoginModule
 ],
   providers: [
     { provide : "baseUrl", useValue : "https://localhost:7045/api", multi : true },
+ {
+      provide: SOCIAL_AUTH_CONFIG,
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider("564293114298-af3241aafm5bdc49cl7comtncn5dnvhh.apps.googleusercontent.com")
+          }
+        ],
+        onError: err => console.log(err)
+      } as SocialAuthServiceConfig
+    },
+
+
+
     provideBrowserGlobalErrorListeners(),
     provideAnimations(),
     provideClientHydration(withEventReplay()),

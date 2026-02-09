@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClientService } from '../http-client-service';
 import { User } from '../../../entities/User';
 import { Auth } from '../auth';
@@ -7,13 +7,19 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { TokenDto } from '../../../contracts/TokenDto';
 import { CustomToastr, ToastrPosition, ToastTrMessageType } from '../../iu/custom-toastr';
 import { PositionType } from '../../admin/alertify';
+import { SocialUser } from '@abacritt/angularx-social-login';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private httpClientService : HttpClientService , private toastr : CustomToastr, private authService: Auth){
-  }
+  constructor(
+    private httpClientService : HttpClientService, 
+    private toastr : CustomToastr, 
+    private authService: Auth,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
   
   async createUser(user : User){
    const observable : Observable<createUser | User > = this.httpClientService.post<createUser | User>({
@@ -31,7 +37,9 @@ export class UserService {
    const token : TokenDto = await firstValueFrom(observable) as TokenDto;
 
     if(token){
-     localStorage.setItem("accessToken" , token.token.accessToken);
+      if(isPlatformBrowser(this.platformId)) {
+         localStorage.setItem("accessToken" , token.token.accessToken);
+      }
      this.authService.identityCheck();
     }
   this.toastr.message("Giriş başarılı." , "Başarılı!" , {
@@ -39,4 +47,26 @@ export class UserService {
      positionType : ToastrPosition.TopRight
   })
 }
+async googleLogin(user: SocialUser, callBack: () => void) {
+  const observable: Observable<SocialUser | TokenDto> = this.httpClientService.post<SocialUser | TokenDto>({
+    controller: "users",
+    action: "google-login"
+  }, user);
+
+  const tokenResponse: TokenDto = await firstValueFrom(observable) as TokenDto;
+
+  if (tokenResponse) {
+    if(isPlatformBrowser(this.platformId)) {
+       localStorage.setItem("accessToken", tokenResponse.token.accessToken);
+    }
+    
+    this.toastr.message("Google girişi başarılı.", "Harika!", {
+      messageType: ToastTrMessageType.Success,
+      positionType: ToastrPosition.TopRight
+    });
+
+    callBack(); 
+  }
 }
+}
+     

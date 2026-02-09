@@ -24,7 +24,7 @@ export class Product {
         let message = "";
         _error.forEach((v, index) => {
             v.value.forEach((_v, _index) => {
-                message += `${_v}<br>`;
+                message += `${_v}<br>`; 
             });
         });
         errorCallBack(message); 
