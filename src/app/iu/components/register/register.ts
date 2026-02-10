@@ -5,6 +5,9 @@ import { UserService } from '../../../services/common/models/user-service';
 import { createUser } from '../../../contracts/User/create-user';
 import { CustomToastr, ToastrPosition, ToastTrMessageType } from '../../../services/iu/custom-toastr';
 import { messageType } from '../../../services/admin/alertify';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { spinnerType } from '../../../base/base';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,7 +20,7 @@ export class Register implements OnInit {
   
   registerForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder , private userService : UserService , private toastr : CustomToastr) {}
+  constructor(private formBuilder: FormBuilder , private userService : UserService , private toastr : CustomToastr , private spinner : NgxSpinnerService , private router : Router ) {}
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -63,15 +66,23 @@ export class Register implements OnInit {
       return ;
 
 const result : createUser = await this.userService.createUser(user);
-if(result.succeeded)
-  this.toastr.message(result.message, "Kullanıcı Kaydi Başariyla oluşturuldu." , {
+
+
+if(result.succeeded){
+  this.toastr.message(result.message, "kullanici oluşturuldu" , {
   messageType : ToastTrMessageType.Success,
    positionType :ToastrPosition.TopRight
   })
+  
+this.router.navigate(["/login"]);
+}
+
  else
     this.toastr.message(result.message, "Hata", {
           messageType: ToastTrMessageType.Error,
           positionType: ToastrPosition.TopRight
         });
       }
+  
+      
  }

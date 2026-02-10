@@ -5,6 +5,8 @@ import { Auth } from '../../../services/common/auth';
 import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { spinnerType } from '../../../base/base';
 
 @Component({
   selector: 'app-login',
@@ -19,21 +21,28 @@ export class Login {
     private activatedRoute: ActivatedRoute, 
     private authService: Auth, 
     private socialAuthService: SocialAuthService,
-    private httpClientService : HttpClient
+    private httpClientService : HttpClient,
+    private spinner :NgxSpinnerService
   ) {
    this.socialAuthService.authState.subscribe(async (user: SocialUser) => {
 console.log(user)  
+ this.spinner.show(spinnerType.ballCircus);
 await userService.googleLogin(user , () => {
         this.authService.identityCheck(); 
+        this.spinner.hide(spinnerType.ballCircus);
         this.router.navigate(["/"]); 
       });
+this.spinner.hide(spinnerType.ballCircus);
     }); 
 
   }
 
   async login(userNameOrEmail: string, password: string) {
+    this.spinner.show(spinnerType.ballCircus);
+  
     await this.userService.login(userNameOrEmail, password);
     this.authService.identityCheck();
+     this.spinner.hide(spinnerType.ballCircus);
     
     this.activatedRoute.queryParams.subscribe(params => {
       const returnUrl = params['returnUrl'];
@@ -42,6 +51,7 @@ await userService.googleLogin(user , () => {
       else
         this.router.navigate(["/"]);
     });
+    this.spinner.hide(spinnerType.ballCircus);
   }
 
 }

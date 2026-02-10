@@ -25,12 +25,12 @@ export class UserService {
    const observable : Observable<createUser | User > = this.httpClientService.post<createUser | User>({
        controller : "users", 
     } , user);
-
    return await firstValueFrom(observable) as createUser;
+   
   }
  async login(userNameOrEmail : string , password : string  ){
    const observable : Observable<any> = this.httpClientService.post< any | TokenDto>({
-       controller : "users",
+       controller : "authentication",
        action : "login"
   } , { userNameOrEmail , password});
   
@@ -49,7 +49,7 @@ export class UserService {
 }
 async googleLogin(user: SocialUser, callBack: () => void) {
   const observable: Observable<SocialUser | TokenDto> = this.httpClientService.post<SocialUser | TokenDto>({
-    controller: "users",
+    controller: "authentication",
     action: "google-login"
   }, user);
 

@@ -15,6 +15,8 @@ import { FileUploadDialog } from './dialogs/file-upload-dialog/file-upload-dialo
 import { JwtModule } from '@auth0/angular-jwt';
 import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule, SOCIAL_AUTH_CONFIG } from '@abacritt/angularx-social-login';
 import { Login } from './iu/components/login/login';
+import { HttpErrorHandlerInterceptor } from './services/common/http-error-handler-interceptor';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -51,10 +53,15 @@ import { Login } from './iu/components/login/login';
         ],
         onError: err => console.log(err)
       } as SocialAuthServiceConfig
-    },
+    }, {
+         provide: HTTP_INTERCEPTORS, 
+         useClass: HttpErrorHandlerInterceptor, 
+         multi: true
+      },
 
 
 
+    provideHttpClient(withInterceptorsFromDi()),
     provideBrowserGlobalErrorListeners(),
     provideAnimations(),
     provideClientHydration(withEventReplay()),
