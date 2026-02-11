@@ -1,17 +1,21 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError, from } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import { CustomToastr, ToastrPosition, ToastTrMessageType } from '../iu/custom-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { spinnerType } from '../../base/base';
+import { UserService } from './models/user-service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpErrorHandlerInterceptor implements HttpInterceptor {
   constructor(private toastr : CustomToastr ,
-    private spinner : NgxSpinnerService
+    private spinner : NgxSpinnerService,
+    private userservice : UserService,
+    private router :Router
    ){
   }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -20,12 +24,35 @@ export class HttpErrorHandlerInterceptor implements HttpInterceptor {
    return next.handle(req).pipe(
     catchError((error:HttpErrorResponse) => {
         switch (error.status) {
-        case HttpStatusCode.Unauthorized:
-                this.toastr.message("Sepete ürün eklemek için oturum açmanız gerekiyor.", "Oturum açınız!", {
-                  messageType: ToastTrMessageType.Warning,
-                  positionType: ToastrPosition.TopRight
+          case HttpStatusCode.Unauthorized:
+
+           return from(this.userservice.refreshTokenLogin(localStorage.getItem("refreshToken"))).pipe(
+            switchMap((state) => {
+              if (state) {
+                const accessToken = localStorage.getItem("accessToken");
+                const cloned = req.clone({
+                  setHeaders: {
+                    Authorization: `Bearer ${accessToken}`
+                  }
                 });
-                break
+                return next.handle(cloned);
+              } else {
+                const url = this.router.url;
+                if (url == "/products")
+                  this.toastr.message("Sepete ürün eklemek için oturum açmanız gerekiyor.", "Oturum açınız!", {
+                    messageType: ToastTrMessageType.Warning,
+                    positionType: ToastrPosition.TopRight
+                  });
+                else
+                  this.toastr.message("Bu işlemi yapmaya yetkiniz bulunmamaktadır!", "Yetkisiz işlem!", {
+                    messageType: ToastTrMessageType.Warning,
+                    positionType: ToastrPosition.BottomFullWidth
+                  });
+                 return throwError(() => error);
+              }
+            })
+          );
+          break;
         case HttpStatusCode.InternalServerError:
           this.toastr.message("Sunucuya erişilmiyor!", "Sunucu hatası!", {
             messageType: ToastTrMessageType.Warning,

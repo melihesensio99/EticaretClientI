@@ -39,6 +39,7 @@ export class UserService {
     if(token){
       if(isPlatformBrowser(this.platformId)) {
          localStorage.setItem("accessToken" , token.token.accessToken);
+         localStorage.setItem("refreshToken" , token.token.refreshToken) 
       }
      this.authService.identityCheck();
     }
@@ -46,6 +47,32 @@ export class UserService {
      messageType : ToastTrMessageType.Success,
      positionType : ToastrPosition.TopRight
   })
+}
+async refreshTokenLogin(refreshToken: string, callBackFunction?: (state) => void): Promise<any> {
+    const observable: Observable<any | TokenDto> = this.httpClientService.post({
+      controller: "authentication",
+      action: "refreshTokenLogin",
+    } , { refreshToken: refreshToken } );
+
+    try {
+      const tokenResponse: TokenDto = await firstValueFrom(observable) as TokenDto;
+
+      if (tokenResponse) {
+        if(isPlatformBrowser(this.platformId)) {
+           localStorage.setItem("accessToken", tokenResponse.token.accessToken);
+           localStorage.setItem("refreshToken", tokenResponse.token.refreshToken);
+        }
+      }
+      
+      if(callBackFunction)
+         callBackFunction(tokenResponse ? true : false);
+
+      return tokenResponse;
+    } catch {
+       if(callBackFunction)
+          callBackFunction(false);
+       return null;
+    }
 }
 async googleLogin(user: SocialUser, callBack: () => void) {
   const observable: Observable<SocialUser | TokenDto> = this.httpClientService.post<SocialUser | TokenDto>({

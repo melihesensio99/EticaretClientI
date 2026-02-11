@@ -34,7 +34,7 @@ await userService.googleLogin(user , () => {
       });
 this.spinner.hide(spinnerType.ballCircus);
     }); 
-
+//todo login pagede kayma var onu duzelt sonradan!!!! ayrica burdaki servisler icin ayri bir class acip daha duzenli hale getir !
   }
 
   async login(userNameOrEmail: string, password: string) {
