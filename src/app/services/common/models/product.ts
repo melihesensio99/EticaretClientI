@@ -30,15 +30,17 @@ export class Product {
         errorCallBack(message); 
     });
 }
-async list(page : number = 0 , size : number = 5 , successCallBack : ()=> void  , errorCallBack?: (errorMessage: string) => void) : Promise<{totalCount : number, products : Listproducts[]}>
-{ const dataPromise : Promise<{totalCount : number, products : Listproducts[]}> = this.httpClientService.get<{totalCount : number, products : Listproducts[]}>({
-    controller : "product"
-    , queryString : `page=${page}&size=${size}`
-  }).toPromise();
-  dataPromise.then(d => successCallBack())
-  .catch((errorResponse : HttpErrorResponse) => { errorCallBack(errorResponse.message); });
-  return await dataPromise;
-} 
+  async list(page: number = 0, size: number = 5, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number, products: Listproducts[] }> {
+    const promiseData = firstValueFrom(this.httpClientService.get<{ totalCount: number, products: Listproducts[] }>({
+      controller: "product",
+      queryString: `page=${page}&size=${size}`
+    }));
+
+    promiseData.then(d => successCallBack && successCallBack())
+      .catch((errorResponse: HttpErrorResponse) => errorCallBack && errorCallBack(errorResponse.message));
+
+    return await promiseData;
+  }
 
 
 async delete(id : string){

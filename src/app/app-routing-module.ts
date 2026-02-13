@@ -14,7 +14,7 @@ const routes: Routes = [
 {path : "products" , loadChildren : () => import("./admin/components/products/products-module").then(m => m.ProductsModule), }
 ]},
 {path : "" , component : Home }, 
-{path : "products" , loadChildren : () => import("./iu/components/products/products-module").then(m => m.ProductsModule) , canActivate: [authGuard] },
+{path : "products" , loadChildren : () => import("./iu/components/products/products-module").then(m => m.ProductsModule) },
 {path : "register" , loadChildren : () => import("./iu/components/register/register-module").then(m => m.RegisterModule )},
 {path : "login" , loadChildren : () => import("./iu/components/login/login-module").then(m => m.LoginModule )},
 {path : "basket" , loadChildren : () => import("./iu/components/baskets/baskets-module").then(m => m.BasketsModule)}

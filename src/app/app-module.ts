@@ -21,7 +21,8 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 @NgModule({
   declarations: [
     App,
-    Login
+    Login,
+    
   ],
  imports: [
   BrowserModule,
