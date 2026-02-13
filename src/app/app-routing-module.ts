@@ -6,7 +6,8 @@ import { Home } from './iu/components/home/home';
 import { authGuard } from './guards/common/auth-guard';
 
 const routes: Routes = [
-  { path : "admin" , component : Layout , children : [
+{ path : "admin" , component : Layout , children : [
+{ path: "", redirectTo: "dashboard", pathMatch: "full" },
 {path : "dashboard" , loadChildren : () => import("./admin/components/dashboard/dashboard-module").then(m => m.DashboardModule)} ,
 {path : "orders" , loadChildren : () => import("./admin/components/orders/orders-module").then(m => m.OrdersModule)},
 {path : "customers" , loadChildren : () => import("./admin/components/customers/customers-module").then(m => m.CustomersModule)},
